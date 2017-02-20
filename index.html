@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Server Stalker</title>
+</head>
+<body>
+I see you soom student, now Gooo!
+tst1
+<div id="map" style="height:100vh;"></div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+	var socket;
+	window.onload = function(){
+		socket = io.connect('http://services.geekadvice.pe:4000');
+		socket.on('connect', function () {
+        	socket.emit('identify', "Gerson");
+        });
+
+		init();
+	};
+
+	function init()
+	{
+        /*navigator.geolocation.getCurrentPosition(function(position){
+            console.log(position);
+			socket.emit('current_location', {lat:position.coords.latitude, lon:position.coords.longitude});
+        });*/
+		navigator.geolocation.watchPosition(function(_coord){
+			console.log(_coord);
+			socket.emit('change_location', {lat:_coord.coords.latitude, lon:_coord.coords.longitude});
+		});
+	}
+</script>
+<script src="app.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPhRJfmJk39RODSk-cxJEIEvfg6fjAulw&callback=initMap"
+        async defer></script>
+</body>
+</html>
